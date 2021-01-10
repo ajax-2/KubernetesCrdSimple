@@ -1,0 +1,7 @@
+apiVersion: longyi.longyi.com/v1
+kind: OutLoadBalancer
+metadata:
+  name: outloadbalancer-sample
+spec:
+  # Add fields here
+  foo: bar

@@ -1,0 +1,28 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - longyi.longyi.com
+  resources:
+  - outloadbalancers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - longyi.longyi.com
+  resources:
+  - outloadbalancers/status
+  verbs:
+  - get
+  - patch
+  - update

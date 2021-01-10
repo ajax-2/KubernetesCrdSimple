@@ -1,0 +1,7 @@
+domain: longyi.com
+repo: longyi.com
+resources:
+- group: longyi
+  kind: OutLoadBalancer
+  version: v1
+version: "2"

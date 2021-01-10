@@ -1,0 +1,20 @@
+# permissions for end users to view outloadbalancers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: outloadbalancer-viewer-role
+rules:
+- apiGroups:
+  - longyi.longyi.com
+  resources:
+  - outloadbalancers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - longyi.longyi.com
+  resources:
+  - outloadbalancers/status
+  verbs:
+  - get
