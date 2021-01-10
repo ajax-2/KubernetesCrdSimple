@@ -1,0 +1,7 @@
+version: "2"
+domain: demo.io
+repo: local.com/demo
+resources:
+- group: dmeo
+  version: v1
+  kind: Demo
