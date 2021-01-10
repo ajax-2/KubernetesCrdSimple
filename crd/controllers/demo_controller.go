@@ -20,11 +20,11 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	dmeov1 "local.com/demo/api/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	dmeov1 "local.com/demo/api/v1"
 )
 
 // DemoReconciler reconciles a Demo object
@@ -43,25 +43,43 @@ func (r *DemoReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	if err := r.Get(ctx, req.NamespacedName, demo); err != nil {
 		log.Info("unable to fetch demo: %v", err)
 	}
+
+	var labels map[string]string
+	labels = make(map[string]string, 2)
+	labels["demo"] = "true"
+	labels["crd"] = "true"
+
+	var annotations map[string]string
+	annotations = make(map[string]string, 1)
+	annotations["demo"] = "true"
+
+	demoMetadata := metav1.ObjectMeta{
+		Name:        demo.Spec.DemoName,
+		Namespace:   req.Namespace,
+		Labels:      labels,
+		Annotations: annotations,
+	}
+
 	demoServiceSpec := corev1.ServiceSpec{
-		Ports: []corev1.ServicePort{
-			corev1.ServicePort{
-				Name:     "http",
-				Protocol: corev1.ProtocolTCP,
-				Port:     demo.Spec.DemoPort,
-				TargetPort: intstr.IntOrString{
-					Type:   0,
-					IntVal: 80,
-					StrVal: "80",
-				},
-			},
-		},
+		Ports:                    []corev1.ServicePort{{Name: "http", Protocol: corev1.ProtocolTCP, Port: demo.Spec.DemoPort, TargetPort: intstr.IntOrString{Type: 0, IntVal: 80, StrVal: "80"}, NodePort: 0}},
+		Selector:                 nil,
+		ClusterIP:                "",
+		Type:                     corev1.ServiceTypeClusterIP,
+		ExternalIPs:              []string{},
+		SessionAffinity:          "",
+		LoadBalancerIP:           "",
+		LoadBalancerSourceRanges: []string{},
+		ExternalName:             "",
+		ExternalTrafficPolicy:    "",
+		HealthCheckNodePort:      0,
+		PublishNotReadyAddresses: false,
+		SessionAffinityConfig:    &corev1.SessionAffinityConfig{},
 	}
 	demoService := corev1.Service{
-		Spec: demoServiceSpec,
+		Spec:       demoServiceSpec,
+		ObjectMeta: demoMetadata,
 	}
 	r.Create(ctx, &demoService)
-	// demoServiceMeta := corev1.TypeMeta
 
 	return ctrl.Result{}, nil
 }
