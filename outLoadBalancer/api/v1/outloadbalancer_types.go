@@ -29,7 +29,10 @@ type OutLoadBalancerSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of OutLoadBalancer. Edit OutLoadBalancer_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	OutHost  string `json:"outHost"`
+	OutPort  int32  `json:"outPort"`
+	OutIP    string `json:"outIP"`
+	LoadName string `json:"loadName"`
 }
 
 // OutLoadBalancerStatus defines the observed state of OutLoadBalancer
