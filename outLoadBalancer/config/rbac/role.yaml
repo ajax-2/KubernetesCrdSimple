@@ -7,22 +7,12 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
-  - longyi.longyi.com
+  - '*'
   resources:
-  - outloadbalancers
+  - '*'
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - longyi.longyi.com
-  resources:
-  - outloadbalancers/status
+  - '*'
+- nonResourceURLs:
+  - '*'
   verbs:
-  - get
-  - patch
-  - update
+  - '*'
